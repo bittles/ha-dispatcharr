@@ -108,6 +108,8 @@ class DispatcharrStreamSensor(CoordinatorEntity, SensorEntity):
         self._attr_extra_state_attributes = {
             "channel_number": channel_details.get("channel_number"),
             "channel_name": channel_details.get("name"),
+            "uuid": channel_details.get("uuid"),
+            "streams": channel_details.get("streams"),
             "logo_url": stream_data.get("logo_url"),
             "clients": stream_data.get("client_count"),
             "resolution": stream_data.get("resolution"),
@@ -115,7 +117,6 @@ class DispatcharrStreamSensor(CoordinatorEntity, SensorEntity):
             "video_codec": stream_data.get("video_codec"),
             "audio_codec": stream_data.get("audio_codec"),
             "avg_bitrate": stream_data.get("avg_bitrate"),
-            "streams": stream_data.get("streams"),
             "program_title": program_data.get("title"),
             "episode_title": program_data.get("subtitle"),
             "episode_number": program_data.get("episode_num"),
