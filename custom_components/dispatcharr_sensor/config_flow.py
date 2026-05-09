@@ -13,12 +13,6 @@ from .const import DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
 
-OPTIONS_SCHEMA = vol.Schema(
-    {
-        vol.Optional("enable_epg", default=true): bool
-    }
-)
-
 # Ask for username and password instead of API token
 STEP_USER_DATA_SCHEMA = vol.Schema(
     {
@@ -27,6 +21,12 @@ STEP_USER_DATA_SCHEMA = vol.Schema(
         vol.Required("username"): str,
         vol.Required("password"): str,
         **OPTIONS_SCHEMA.schema,
+    }
+)
+
+OPTIONS_SCHEMA = vol.Schema(
+    {
+        vol.Optional("enable_epg", default=true): bool
     }
 )
 
