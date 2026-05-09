@@ -1,7 +1,7 @@
 {
-  "name": "Dispatcharr Sessions Sensor Fork",
+  "name": "Dispatcharr Sessions Sensor",
   "content_in_root": false,
-  "domains": ["sensor, media_player"],
+  "domains": ["sensor"],
   "country": "us",
   "homeassistant": "2022.6.0"
 }
