@@ -19,7 +19,7 @@ _LOGGER = logging.getLogger(__name__)
 
 OPTIONS_SCHEMA = vol.Schema(
     {
-        vol.Required("enable_epg", default=true): bool
+        vol.Required("enable_epg", default=True): bool
     }
 )
 
