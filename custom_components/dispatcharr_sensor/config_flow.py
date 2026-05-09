@@ -3,8 +3,12 @@ from __future__ import annotations
 import logging
 from typing import Any
 import voluptuous as vol
-from homeassistant import config_entries
-from homeassistant.data_entry_flow import FlowResult
+from homeassistant.config_entries import (
+    ConfigEntry,
+    ConfigFlow,
+    FlowResult,
+)
+from homeassistant.core import callback
 from homeassistant.helpers.schema_config_entry_flow import (
     SchemaFlowFormStep,
     SchemaOptionsFlowHandler,
@@ -15,7 +19,7 @@ _LOGGER = logging.getLogger(__name__)
 
 OPTIONS_SCHEMA = vol.Schema(
     {
-        vol.Optional("enable_epg", default=true): bool
+        vol.Required("enable_epg", default=True): bool
     }
 )
 
@@ -34,11 +38,12 @@ OPTIONS_FLOW = {
     "init": SchemaFlowFormStep(OPTIONS_SCHEMA),
 }
 
-class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
+class DispatcharrFlow(ConfigFlow, domain=DOMAIN):
     """Handle a config flow for Dispatcharr Sensor."""
 
     VERSION = 1
-
+    @staticmethod
+    @callback
     def async_get_options_flow(config_entry: ConfigEntry) -> SchemaOptionsFlowHandler:
         return SchemaOptionsFlowHandler(config_entry, OPTIONS_FLOW)
 
@@ -55,6 +60,6 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             title="Dispatcharr",
             data=user_input,
             options={
-                enable_epg: user_input["enable_epg"],
+                "enable_epg": user_input["enable_epg"],
                 },
             )
