@@ -110,6 +110,7 @@ class DispatcharrStreamSensor(CoordinatorEntity, SensorEntity):
             "channel_name": channel_details.get("name"),
             "uuid": channel_details.get("uuid"),
             "streams": channel_details.get("streams"),
+            "current_stream": stream_data.get("stream_id"),
             "logo_url": stream_data.get("logo_url"),
             "clients": stream_data.get("client_count"),
             "resolution": stream_data.get("resolution"),
