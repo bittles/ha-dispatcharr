@@ -60,6 +60,6 @@ class DispatcharrFlow(ConfigFlow, domain=DOMAIN):
             title="Dispatcharr",
             data=user_input,
             options={
-                enable_epg: user_input["enable_epg"],
+                "enable_epg": user_input["enable_epg"],
                 },
             )
