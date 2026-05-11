@@ -44,9 +44,13 @@ class DispatcharrStreamManager:
             current_stream_ids = set()
         else:
             current_stream_ids = set(self._coordinator.data.keys())
-        
+
         new_stream_ids = current_stream_ids - self._known_stream_ids
         if new_stream_ids:
+            #total_streams = 0
+            #for stream in new_stream_ids:
+            #    total_streams = total_streams + 1
+            #    new_stream_ids["stream_index"] = total_streams
             new_sensors = [DispatcharrStreamSensor(self._coordinator, stream_id) for stream_id in new_stream_ids]
             self._async_add_entities(new_sensors)
             self._known_stream_ids.update(new_stream_ids)
@@ -77,11 +81,12 @@ class DispatcharrStreamSensor(CoordinatorEntity, SensorEntity):
     def __init__(self, coordinator: DispatcharrDataUpdateCoordinator, stream_id: str):
         super().__init__(coordinator)
         self._stream_id = stream_id
+        #self._stream_index = 
         
         channel_details = coordinator.channel_details.get(stream_id) or {}
         name = channel_details.get("name", f"Stream {self._stream_id[-6:]}")
         
-        self._attr_name = name
+        self._attr_name = f"{name}_{self._stream_id}"
         self._attr_unique_id = f"{coordinator.config_entry.entry_id}_{self._stream_id}"
         self._attr_icon = "mdi:television-stream"
         self._attr_device_info = DeviceInfo(identifiers={(DOMAIN, coordinator.config_entry.entry_id)}, name="Dispatcharr")
