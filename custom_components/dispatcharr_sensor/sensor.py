@@ -81,13 +81,13 @@ class DispatcharrStreamSensor(CoordinatorEntity, SensorEntity):
     def __init__(self, coordinator: DispatcharrDataUpdateCoordinator, stream_id: str):
         super().__init__(coordinator)
         self._stream_id = stream_id
-        #self._stream_index = 
+        self._stream_index = coordinator.data[self._stream_id].get("stream_index") or {}
         
         channel_details = coordinator.channel_details.get(stream_id) or {}
         name = channel_details.get("name", f"Stream {self._stream_id[-6:]}")
         
-        self._attr_name = f"{name}_{self._stream_id}"
-        self._attr_unique_id = f"{coordinator.config_entry.entry_id}_{self._stream_id}"
+        self._attr_name = f"{name} Stream {self._stream_index}"
+        self._attr_unique_id = f"{coordinator.config_entry.entry_id}_{self._stream_index}"
         self._attr_icon = "mdi:television-stream"
         self._attr_device_info = DeviceInfo(identifiers={(DOMAIN, coordinator.config_entry.entry_id)}, name="Dispatcharr")
 
