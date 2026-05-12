@@ -44,14 +44,16 @@ class DispatcharrStreamManager:
             current_stream_ids = set()
         else:
             current_stream_ids = set(self._coordinator.data.keys())
+            _LOGGER.debug("Current stream ids: %s", current_stream_ids)
 
         new_stream_ids = current_stream_ids - self._known_stream_ids
+        _LOGGER.debug("NEW stream ids: %s", new_stream_ids)
         if new_stream_ids:
             #total_streams = 0
             #for stream in new_stream_ids:
             #    total_streams = total_streams + 1
             #    new_stream_ids["stream_index"] = total_streams
-            new_sensors = [DispatcharrStreamSensor(self._coordinator, stream_index) for stream_id in new_stream_ids]
+            new_sensors = [DispatcharrStreamSensor(self._coordinator, stream_id) for stream_id in new_stream_ids]
             self._async_add_entities(new_sensors)
             self._known_stream_ids.update(new_stream_ids)
 
@@ -78,9 +80,9 @@ class DispatcharrStreamSensor(CoordinatorEntity, SensorEntity):
     _attr_should_poll = False
     _attr_has_entity_name = True
 
-    def __init__(self, coordinator: DispatcharrDataUpdateCoordinator, stream_index: int):
+    def __init__(self, coordinator: DispatcharrDataUpdateCoordinator, stream_id: str):
         super().__init__(coordinator)
-        #self._stream_id = stream_id
+        self._stream_id = stream_id
         self._stream_index = stream_index
         
         #channel_details = coordinator.channel_details.get(stream_id) or {}
