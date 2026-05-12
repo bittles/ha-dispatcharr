@@ -172,6 +172,7 @@ class DispatcharrDataUpdateCoordinator(DataUpdateCoordinator):
         enriched_streams = {}
         for stream in active_streams:
             number_of_streams = number_of_streams + 1
+            stream_index = number_of_streams
             stream_uuid = stream['channel_id']
             enriched_stream = stream.copy()
             details = self.channel_details.get(stream_uuid)
@@ -181,6 +182,5 @@ class DispatcharrDataUpdateCoordinator(DataUpdateCoordinator):
                 if numeric_id_float := details.get("channel_number"):
                     numeric_id_str = str(int(numeric_id_float))
                     enriched_stream["program"] = current_programs_map.get(numeric_id_str)
-            enriched_stream["stream_index"] = number_of_streams
-            enriched_streams[stream_uuid] = enriched_stream
+            enriched_streams[stream_index] = enriched_stream
         return enriched_streams

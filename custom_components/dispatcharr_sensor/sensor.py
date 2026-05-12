@@ -49,10 +49,6 @@ class DispatcharrStreamManager:
         new_stream_ids = current_stream_ids - self._known_stream_ids
         _LOGGER.debug("NEW stream ids: %s", new_stream_ids)
         if new_stream_ids:
-            #total_streams = 0
-            #for stream in new_stream_ids:
-            #    total_streams = total_streams + 1
-            #    new_stream_ids["stream_index"] = total_streams
             new_sensors = [DispatcharrStreamSensor(self._coordinator, stream_id) for stream_id in new_stream_ids]
             self._async_add_entities(new_sensors)
             self._known_stream_ids.update(new_stream_ids)
@@ -83,14 +79,12 @@ class DispatcharrStreamSensor(CoordinatorEntity, SensorEntity):
     def __init__(self, coordinator: DispatcharrDataUpdateCoordinator, stream_id: str):
         super().__init__(coordinator)
         self._stream_id = stream_id
-        stream_details = self.coordinator.data[self._stream_id]
-        self._stream_index = stream_details.get("stream_index")
         
         #channel_details = coordinator.channel_details.get(stream_id) or {}
         #name = channel_details.get("name", f"Stream {self._stream_id[-6:]}")
         
-        self._attr_name = f"Dispatcharr Stream {self._stream_index}"
-        self._attr_unique_id = f"{coordinator.config_entry.entry_id}_{self._stream_index}"
+        self._attr_name = f"{coordinator.config_entry.entry_id} Stream {self._stream_id}"
+        self._attr_unique_id = f"{coordinator.config_entry.entry_id}_{self._stream_id}"
         self._attr_icon = "mdi:television-stream"
         self._attr_device_info = DeviceInfo(identifiers={(DOMAIN, coordinator.config_entry.entry_id)}, name="Dispatcharr")
 
@@ -113,7 +107,7 @@ class DispatcharrStreamSensor(CoordinatorEntity, SensorEntity):
         
         self._attr_native_value = "Streaming"
         self._attr_entity_picture = stream_data.get("logo_url")
-        self._attr_name = channel_details.get(self._attr_name, "name")
+        self._attr_name = stream_data.get("stream_index", self._attr_name)
         self._attr_extra_state_attributes = {
             "stream_index": self._stream_index,
             "channel_number": channel_details.get("channel_number"),
