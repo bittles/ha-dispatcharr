@@ -83,7 +83,7 @@ class DispatcharrStreamSensor(CoordinatorEntity, SensorEntity):
     def __init__(self, coordinator: DispatcharrDataUpdateCoordinator, stream_id: str):
         super().__init__(coordinator)
         self._stream_id = stream_id
-        self._stream_index = stream_index
+        self._stream_index = self.coordinator.data[self._stream_id].get("stream_index")
         
         #channel_details = coordinator.channel_details.get(stream_id) or {}
         #name = channel_details.get("name", f"Stream {self._stream_id[-6:]}")
@@ -105,14 +105,14 @@ class DispatcharrStreamSensor(CoordinatorEntity, SensorEntity):
             self.async_write_ha_state()
             return
             
-        stream_data = self.coordinator.data[self._stream_index]
+        stream_data = self.coordinator.data[self._stream_id]
         channel_id = stream_data.get("channel_id")
         program_data = stream_data.get("program") or {}
         channel_details = self.coordinator.channel_details.get(channel_id) or {}
         
         self._attr_native_value = "Streaming"
         self._attr_entity_picture = stream_data.get("logo_url")
-        self._attr_name = channel_details.get("name", self._attr_name)
+        self._attr_name = channel_details.get(self._attr_name, "name")
         self._attr_extra_state_attributes = {
             "stream_index": self._stream_index,
             "channel_number": channel_details.get("channel_number"),
