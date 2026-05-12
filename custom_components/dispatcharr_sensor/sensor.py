@@ -109,7 +109,7 @@ class DispatcharrStreamSensor(CoordinatorEntity, SensorEntity):
         self._attr_entity_picture = stream_data.get("logo_url")
         self._attr_name = stream_data.get("stream_index", self._attr_name)
         self._attr_extra_state_attributes = {
-            "stream_index": self._stream_index,
+            "stream_index": self._stream_id,
             "channel_number": channel_details.get("channel_number"),
             "channel_name": channel_details.get("name"),
             "uuid": channel_details.get("uuid"),
