@@ -83,7 +83,8 @@ class DispatcharrStreamSensor(CoordinatorEntity, SensorEntity):
     def __init__(self, coordinator: DispatcharrDataUpdateCoordinator, stream_id: str):
         super().__init__(coordinator)
         self._stream_id = stream_id
-        self._stream_index = self.coordinator.data[self._stream_id].get("stream_index")
+        stream_details = self.coordinator.data[self._stream_id]
+        self._stream_index = stream_details.get("stream_index")
         
         #channel_details = coordinator.channel_details.get(stream_id) or {}
         #name = channel_details.get("name", f"Stream {self._stream_id[-6:]}")
