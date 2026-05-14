@@ -56,7 +56,7 @@ class DispatcharrDataUpdateCoordinator(DataUpdateCoordinator):
     def base_url(self) -> str:
         """Get the base URL for API calls."""
         data = self.config_entry.data
-        protocol = "https" if data.get("ssl", False) else "http"
+        protocol = "https" if data.get("ssl", True) else "http"
         return f"{protocol}://{data['host']}:{data['port']}"
 
     async def _get_new_token(self) -> None:
