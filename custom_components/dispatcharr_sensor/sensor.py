@@ -44,8 +44,10 @@ class DispatcharrStreamManager:
             current_stream_ids = set()
         else:
             current_stream_ids = set(self._coordinator.data.keys())
-        
+            _LOGGER.debug("Current stream ids: %s", current_stream_ids)
+
         new_stream_ids = current_stream_ids - self._known_stream_ids
+        _LOGGER.debug("NEW stream ids: %s", new_stream_ids)
         if new_stream_ids:
             new_sensors = [DispatcharrStreamSensor(self._coordinator, stream_id) for stream_id in new_stream_ids]
             self._async_add_entities(new_sensors)
@@ -78,10 +80,10 @@ class DispatcharrStreamSensor(CoordinatorEntity, SensorEntity):
         super().__init__(coordinator)
         self._stream_id = stream_id
         
-        channel_details = coordinator.channel_details.get(stream_id) or {}
-        name = channel_details.get("name", f"Stream {self._stream_id[-6:]}")
+        #channel_details = coordinator.channel_details.get(stream_id) or {}
+        #name = channel_details.get("name", f"Stream {self._stream_id[-6:]}")
         
-        self._attr_name = name
+        self._attr_name = f"{coordinator.config_entry.entry_id} Stream {self._stream_id}"
         self._attr_unique_id = f"{coordinator.config_entry.entry_id}_{self._stream_id}"
         self._attr_icon = "mdi:television-stream"
         self._attr_device_info = DeviceInfo(identifiers={(DOMAIN, coordinator.config_entry.entry_id)}, name="Dispatcharr")
@@ -99,13 +101,15 @@ class DispatcharrStreamSensor(CoordinatorEntity, SensorEntity):
             return
             
         stream_data = self.coordinator.data[self._stream_id]
+        channel_id = stream_data.get("channel_id")
         program_data = stream_data.get("program") or {}
-        channel_details = self.coordinator.channel_details.get(self._stream_id) or {}
+        channel_details = self.coordinator.channel_details.get(channel_id) or {}
         
         self._attr_native_value = "Streaming"
         self._attr_entity_picture = stream_data.get("logo_url")
-        self._attr_name = channel_details.get("name", self._attr_name)
+        self._attr_name = stream_data.get("stream_index", self._attr_name)
         self._attr_extra_state_attributes = {
+            "stream_index": self._stream_id,
             "channel_number": channel_details.get("channel_number"),
             "channel_name": channel_details.get("name"),
             "uuid": channel_details.get("uuid"),

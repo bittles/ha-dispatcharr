@@ -1,4 +1,5 @@
-# Dispatcharr Integration for Home Assistant
+# Dispatcharr Integration for Home Assistant FORKED
+## This fork identifies and creates sensors by number of streams in Dispatcharr instead of by channel.  I wanted consistent entity ids no matter what channel was streaming.  So if one channel is streaming that's in "slot 1", if another is streaming at the same time then that's "slot 2", etc.  Also implemented the planned option for enabling and disabling epg from the parent repo.
 
 This is a custom integration for Home Assistant that monitors active streams from a Dispatcharr server. It provides sensors to track the total number of streams and detailed information for each individual stream.
 
